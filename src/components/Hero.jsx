@@ -37,8 +37,9 @@ export default function Hero({ products = [], onProductClick }) {
 
       {/* ========== SECTION 1: Logo Feature (integrated background mark) ========== */}
       <div className="relative z-10 flex-shrink-0 pt-24 pb-6 sm:pt-28 sm:pb-10 px-4">
-        <div className="flex items-center justify-center">
-          <div className="logo-integrated w-full max-w-[280px] sm:max-w-[360px] md:max-w-[480px] lg:max-w-[580px] xl:max-w-[660px]">
+        <div className="flex flex-col items-center justify-center">
+          {/* Logo mark */}
+          <div className="logo-integrated w-full max-w-[220px] sm:max-w-[280px] md:max-w-[360px] lg:max-w-[420px] xl:max-w-[480px]">
             {/* Sparkle overlay on logo region */}
             <div className="logo-sparkle-overlay">
               <span className="sparkle-star" style={{ top: '15%', left: '20%', animationDelay: '0.2s' }} />
@@ -55,6 +56,11 @@ export default function Hero({ products = [], onProductClick }) {
               onError={(e) => { e.target.onerror = null; e.target.src = '/logo.svg'; }}
             />
           </div>
+          
+          {/* Tagline text below logo */}
+          <p className="mt-4 sm:mt-6 text-center font-display italic text-sm sm:text-base md:text-lg lg:text-xl tracking-wide logo-tagline">
+            Custom Designs by Anastasia, Age 11
+          </p>
         </div>
       </div>
 
