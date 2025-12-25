@@ -1,0 +1,40 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Netlify Identity for authentication
+local_backend: true
+
+# Media files
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Collections
+collections:
+  # Products collection
+  - name: "products"
+    label: "Products"
+    folder: "src/content/products"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Price", name: "price", widget: "string", required: false, hint: "e.g., $48" }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Created Date", name: "createdDate", widget: "datetime" }
+
+  # Site settings
+  - name: "site"
+    label: "Site Settings"
+    files:
+      - label: "General Settings"
+        name: "settings"
+        file: "src/content/site/settings.json"
+        fields:
+          - { label: "Headline", name: "headline", widget: "string" }
+          - { label: "Subheadline", name: "subheadline", widget: "text" }
+          - { label: "Footer Note", name: "footerNote", widget: "string" }

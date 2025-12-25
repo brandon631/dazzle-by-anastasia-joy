@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-luxury-900 text-white font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-sm font-semibold tracking-wider uppercase
+           bg-gradient-to-r from-accent-pink to-accent-purple
+           rounded-full transition-all duration-300 ease-out
+           hover:shadow-xl hover:shadow-accent-pink/40 hover:scale-105
+           focus:outline-none focus:ring-2 focus:ring-accent-pink focus:ring-offset-2 focus:ring-offset-luxury-900;
+  }
+
+  .glow-border {
+    @apply relative;
+  }
+
+  .glow-border::before {
+    content: '';
+    @apply absolute -inset-0.5 bg-gradient-to-r from-accent-pink via-accent-purple to-accent-gold
+           rounded-lg opacity-50 blur transition-opacity duration-300 -z-10;
+  }
+
+  .glow-border:hover::before {
+    @apply opacity-75;
+  }
+
+  /* Nav pill buttons */
+  .nav-pill {
+    @apply relative px-4 py-2 text-xs font-semibold tracking-wider uppercase
+           text-white/70 rounded-full transition-all duration-300
+           border border-transparent;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-pill::before {
+    content: '';
+    @apply absolute -inset-[1px] rounded-full opacity-0 transition-all duration-500;
+    background: linear-gradient(135deg, rgba(255,107,157,0.7), rgba(181,108,255,0.7), rgba(255,255,255,0.5), rgba(255,107,157,0.7));
+    background-size: 300% 300%;
+    z-index: -1;
+    filter: blur(3px);
+    animation: crystal-shimmer 3s ease-in-out infinite paused;
+  }
+
+  .nav-pill:hover {
+    @apply text-white;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .nav-pill:hover::before {
+    @apply opacity-100;
+    animation-play-state: running;
+  }
+
+  .nav-pill-active {
+    @apply text-white;
+    background: linear-gradient(135deg, rgba(255,107,157,0.25), rgba(181,108,255,0.25));
+    border-color: rgba(255, 107, 157, 0.5);
+    box-shadow: 
+      0 0 10px rgba(255, 107, 157, 0.4),
+      0 0 20px rgba(181, 108, 255, 0.25),
+      inset 0 0 15px rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-pill-active::before {
+    @apply opacity-70;
+    animation-play-state: running;
+  }
+
+  @keyframes crystal-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Logo integrated background mark - dissolved edges */
+  .logo-integrated {
+    position: relative;
+    display: inline-block;
+  }
+
+  .logo-integrated img {
+    opacity: 0.9;
+    mask-image: radial-gradient(ellipse 90% 85% at center, black 40%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 85% at center, black 40%, transparent 75%);
+    filter: 
+      drop-shadow(0 0 20px rgba(255,107,157,0.15))
+      drop-shadow(0 0 40px rgba(181,108,255,0.1));
+  }
+
+  /* Subtle ambient glow behind logo */
+  .logo-integrated::before {
+    content: '';
+    position: absolute;
+    inset: -30px;
+    background: radial-gradient(
+      ellipse 60% 50% at center,
+      rgba(181,108,255,0.12) 0%,
+      rgba(255,107,157,0.08) 30%,
+      transparent 60%
+    );
+    filter: blur(25px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Sparkle overlay container for logo region */
+  .logo-sparkle-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .sparkle-bg {
+    background-image: 
+      radial-gradient(2px 2px at 10% 20%, rgba(255,215,0,0.4), transparent),
+      radial-gradient(3px 3px at 30% 65%, rgba(255,107,157,0.3), transparent),
+      radial-gradient(2px 2px at 50% 10%, rgba(181,108,255,0.4), transparent),
+      radial-gradient(3px 3px at 70% 80%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(2px 2px at 85% 30%, rgba(255,215,0,0.3), transparent),
+      radial-gradient(1px 1px at 15% 85%, rgba(255,107,157,0.3), transparent),
+      radial-gradient(2px 2px at 95% 60%, rgba(181,108,255,0.3), transparent),
+      radial-gradient(1px 1px at 40% 40%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(2px 2px at 60% 55%, rgba(255,215,0,0.2), transparent),
+      radial-gradient(1px 1px at 25% 45%, rgba(255,107,157,0.25), transparent);
+    background-size: 100% 100%;
+    animation: sparkle-drift 20s linear infinite;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent-pink via-accent-purple to-accent-gold;
+  }
+
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+}
+
+/* Sparkle drift animation */
+@keyframes sparkle-drift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* Hero logo as blended background */
+.hero-logo-bg {
+  position: relative;
+  mask-image: radial-gradient(ellipse 70% 60% at center, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 20%, transparent 70%);
+}
+
+/* Sparkle twinkle stars */
+.sparkle-star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,215,0,0.8) 40%, transparent 70%);
+  box-shadow: 
+    0 0 6px 2px rgba(255, 215, 0, 0.6),
+    0 0 12px 4px rgba(255, 107, 157, 0.3);
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.sparkle-star::before,
+.sparkle-star::after {
+  content: '';
+  position: absolute;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.8), transparent);
+}
+
+.sparkle-star::before {
+  width: 2px;
+  height: 12px;
+  left: 1px;
+  top: -4px;
+}
+
+.sparkle-star::after {
+  width: 12px;
+  height: 2px;
+  left: -4px;
+  top: 1px;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #12121a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ff6b9d, #b56cff);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ff8bb5, #c78aff);
+}
