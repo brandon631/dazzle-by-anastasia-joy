@@ -5,16 +5,75 @@ function parseFrontmatter(content) {
   
   const frontmatter = match[1]
   const data = {}
+  const lines = frontmatter.split(/\r?\n/)
   
-  frontmatter.split('\n').forEach(line => {
+  for (let i = 0; i < lines.length; i += 1) {
+    const line = lines[i]
+    if (!line.trim()) continue
+    
+    // Skip lines that start with whitespace (they're part of a block)
+    if (/^\s/.test(line)) continue
+    
     const colonIndex = line.indexOf(':')
-    if (colonIndex === -1) return
+    if (colonIndex === -1) continue
     
     const key = line.slice(0, colonIndex).trim()
     let value = line.slice(colonIndex + 1).trim()
     
+    const isBlockScalar = value === '|' || value === '|-' || value === '>' || value === '>-'
+    const isIndentedBlock = value === '' && lines[i + 1] && /^\s+/.test(lines[i + 1])
+    
+    if (isBlockScalar || isIndentedBlock) {
+      const isFolded = value.startsWith('>') || isIndentedBlock
+      const blockLines = []
+      
+      // Collect all following indented lines
+      let j = i + 1
+      let baseIndent = null
+      
+      while (j < lines.length) {
+        const nextLine = lines[j]
+        
+        // Check if this line starts a new key (no leading whitespace and has a colon)
+        if (nextLine.trim() && !/^\s/.test(nextLine) && nextLine.includes(':')) {
+          break
+        }
+        
+        // Handle empty lines within the block
+        if (nextLine.trim() === '') {
+          blockLines.push('')
+          j++
+          continue
+        }
+        
+        // Get indentation
+        const indentMatch = nextLine.match(/^(\s+)/)
+        if (!indentMatch) break
+        
+        // Set base indent from first content line
+        if (baseIndent === null) {
+          baseIndent = indentMatch[1].length
+        }
+        
+        // Extract content after base indentation
+        blockLines.push(nextLine.slice(baseIndent))
+        j++
+      }
+      
+      i = j - 1
+      
+      // Join lines: folded (>) joins with spaces, literal (|) preserves newlines
+      const joiner = isFolded ? ' ' : '\n'
+      // Remove trailing empty lines and join
+      while (blockLines.length > 0 && blockLines[blockLines.length - 1] === '') {
+        blockLines.pop()
+      }
+      data[key] = blockLines.join(joiner).replace(/\s+/g, ' ').trim()
+      continue
+    }
+    
     // Remove quotes
-    if ((value.startsWith('"') && value.endsWith('"')) || 
+    if ((value.startsWith('"') && value.endsWith('"')) ||
         (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1)
     }
@@ -24,7 +83,7 @@ function parseFrontmatter(content) {
     else if (value === 'false') value = false
     
     data[key] = value
-  })
+  }
   
   return data
 }
